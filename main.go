@@ -19,6 +19,7 @@ type request struct {
 	TypeID int `json:"typeID"`
 }
 
+
 type proof struct {
         Context []string `json:"@context"`
         Type string `json:"type"`
@@ -104,16 +105,16 @@ func createSignature() {
 		fmt.Println(err)
 	}
 	f, err := os.Create("user.sign")
-	
-    	if err != nil {
-        	fmt.Println(err)
-    	}
+
+	if err != nil {
+	fmt.Println(err)
+	}
 	defer f.Close()
-	
+
 	_, err = f.WriteString(string(out))
-    	if err != nil {
-        	fmt.Println(err)
-    	}
+	if err != nil {
+       fmt.Println(err)
+	}
 }
 
 func signVC(vc VC) HolderSignedVC {
@@ -183,10 +184,22 @@ func RequestAllVC(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(vcs)
 }
 
+func IssueCertificate(w http.ResponseWriter, req *http.Request){
+	 var r request
+	 b, _ := io.ReadAll(req.Body)
+	 err := json.Unmarshal(b, &r)
+	 if err != nil {
+		fmt.Println(err)
+	 }
+	 docTypeID := r.TypeID
+	 //send to issuer
+}
+
 func main() {
     //Handlers
     http.HandleFunc("/idme/holder/request/v1/vp", RequestVP)
     http.HandleFunc("/idme/holder/request/v1/allvc", RequestAllVC)
+    http.HandleFunc("/idme/holder/issue/certificate", IssueCertificate)
     fmt.Printf("Running on port 8080...");
     http.ListenAndServe("131.159.209.212:8080", nil)
 }
