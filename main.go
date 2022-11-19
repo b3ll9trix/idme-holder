@@ -10,12 +10,13 @@ import (
     "os/exec"
     "math/rand"
     "time"
+    "strings"
 )
 
 
 
 type request struct {
-	DocID int `json:"docID"`
+	TypeID int `json:"typeID"`
 }
 
 type proof struct {
@@ -30,7 +31,8 @@ type proof struct {
 }
 
 type VC struct {
-        Type string `json:"type"`
+	TypeID int `json:"typeID"`
+	Type string `json:"type"`
         ID string `json:"id"`
         Proof proof `json:"proof"`
 }
@@ -146,7 +148,7 @@ func RequestVP(w http.ResponseWriter, req *http.Request) {
 	if (err != nil) {
 		fmt.Println(err)
 	}
-	vc := fetchVC(r.DocID)
+	vc := fetchVC(r.TypeID)
 	err = json.Unmarshal(vc, &vcWithoutSign)
 	//signing
 	hsvc := signVC(vcWithoutSign)
@@ -157,11 +159,34 @@ func RequestVP(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(hsvc)
 }
 
-
+func RequestAllVC(w http.ResponseWriter, req *http.Request) {
+	certs, err := os.ReadDir("./cert")
+	if err != nil {
+		fmt.Println(err)
+	}
+	var vcs  []VC
+	for _, cert := range certs {
+		var vcWithoutSign VC
+		fileName := cert.Name()
+		splitFileName := strings.Split(fileName, "_")
+		splitFileName = strings.Split(splitFileName[1], ".")
+		docID := splitFileName[0]
+		docIDInt, _ := strconv.Atoi(docID)
+		vc := fetchVC(docIDInt)
+		err := json.Unmarshal(vc, &vcWithoutSign)
+		if err != nil {
+			fmt.Println(err)
+		}
+		vcs = append(vcs, vcWithoutSign)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(vcs)
+}
 
 func main() {
     //Handlers
     http.HandleFunc("/idme/holder/request/v1/vp", RequestVP)
+    http.HandleFunc("/idme/holder/request/v1/allvc", RequestAllVC)
     fmt.Printf("Running on port 8080...");
-    http.ListenAndServe(":8080", nil)
+    http.ListenAndServe("131.159.209.212:8080", nil)
 }
