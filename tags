@@ -1,0 +1,19 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+HolderSignedVC	main.go	/^type HolderSignedVC struct {$/;"	t
+IssueCertificate	main.go	/^func IssueCertificate(w http.ResponseWriter, req *http.Request){$/;"	f
+RequestAllVC	main.go	/^func RequestAllVC(w http.ResponseWriter, req *http.Request) {$/;"	f
+RequestVP	main.go	/^func RequestVP(w http.ResponseWriter, req *http.Request) {$/;"	f
+VC	main.go	/^type VC struct {$/;"	t
+createDID	main.go	/^func createDID(){$/;"	f
+createSignature	main.go	/^func createSignature() {$/;"	f
+fetchVC	main.go	/^func fetchVC(id int) []byte  {$/;"	f
+main	main.go	/^func main() {$/;"	f
+main	main.go	/^package main$/;"	p
+proof	main.go	/^type proof struct {$/;"	t
+request	main.go	/^type request struct {$/;"	t
+signVC	main.go	/^func signVC(vc VC) HolderSignedVC {$/;"	f
