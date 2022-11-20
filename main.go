@@ -158,6 +158,7 @@ func RequestVP(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(hsvc)
 }
 
@@ -182,6 +183,8 @@ func RequestAllVC(w http.ResponseWriter, req *http.Request) {
 		vcs = append(vcs, vcWithoutSign)
 	}
 	w.Header().Set("Content-Type", "application/json")
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(vcs)
 }
 
