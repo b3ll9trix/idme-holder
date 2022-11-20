@@ -11,6 +11,7 @@ import (
     "math/rand"
     "time"
     "strings"
+    "bytes"
 )
 
 
@@ -192,7 +193,23 @@ func IssueCertificate(w http.ResponseWriter, req *http.Request){
 		fmt.Println(err)
 	 }
 	 docTypeID := r.TypeID
+	 reqBody := bytes.NewBuffer(b)
 	 //send to issuer
+	 resp, err := http.Post("http://131.159.209.212:8090/idme/issuer/issue/v1/vc", "application/json", reqBody)
+	 if err != nil {
+		fmt.Println(err)
+	 }
+	 defer resp.Body.Close()
+	 body, err := io.ReadAll(resp.Body)
+	 //store the response in cert folder
+	 f, err := os.Create("./cert/vc_"+strconv.Itoa(docTypeID)+".cert")
+         if err != nil {
+		fmt.Println(err)
+         }
+         defer f.Close()
+         _, err = f.WriteString(string(body))
+
+
 }
 
 func main() {
